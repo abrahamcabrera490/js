@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 const port = 3000;
+const bodyParser = require("body-parser");
+
+app.use(bodyParser.json());
 
 // Send static files
 app.get("/", (req, res) => {
@@ -30,6 +33,10 @@ app.post("/hello", (req, res) => {
   const { saludo } = req.body;
 
   res.json({ saludo: saludo });
+});
+
+app.delete("/hello", (req, res) => {
+  res.json({ saludo: "Adiós" });
 });
 
 // Start server
