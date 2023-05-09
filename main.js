@@ -4,7 +4,7 @@ const port = 3000;
 
 // Send static files
 app.get("/", (req, res) => {
-  const titulo = 'Hola Ing';
+  const titulo = "Hola Ing";
   const html = `
     <html>
       <head>
@@ -24,6 +24,12 @@ app.get("/", (req, res) => {
 app.get("/hello", (req, res) => {
   // res.send({ saludo: "Bienvenido" });
   res.json({ saludo: "Bienvenido" });
+});
+
+app.post("/hello", (req, res) => {
+  const { saludo } = req.body;
+
+  res.json({ saludo: saludo });
 });
 
 // Start server
