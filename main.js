@@ -4,13 +4,14 @@ const port = 3000;
 
 // Send static files
 app.get("/", (req, res) => {
+  const titulo = 'Hola Ing';
   const html = `
     <html>
       <head>
-        <title>Home</title>
+        <title>${titulo}</title>
       </head>
       <body>
-        <h1>Home</h1>
+        <h1>${titulo}</h1>
         <p>Esta es la página de inicio</p>
       </body>
     </html>
