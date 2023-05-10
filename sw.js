@@ -1,10 +1,10 @@
 const axios = require('axios');
 
 const starwars = async ()=>{
-    const resultado =  await axios.get('https://reqres.in/api/users?page=2')
-   console.log(resultado);  
+    const resultado =  await axios.get('https://swapi.dev/api/people/1/');
+    return resultado;  
    
    }
 
 
-   starwars();
+   module.exports = starwars;
