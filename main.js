@@ -3,8 +3,8 @@ const app = express();
 const port = 3000;
 const bodyParser = require("body-parser");
 const starwars = require("./sw");
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./sqlite/chinook.db');
+const sqlite3 = require("sqlite3").verbose();
+const db = new sqlite3.Database("./sqlite/chinook.db");
 
 app.use(bodyParser.json());
 
@@ -13,10 +13,9 @@ app.get("/", (req, res) => {
   res.json({ saludo: "App Works" });
 });
 
-
 // Ruta GET para obtener los datos de la consulta
-app.get('/Generos', (req, res) => {
-  const query = 'SELECT * FROM genres'; 
+app.get("/Generos", (req, res) => {
+  const query = "SELECT * FROM genres";
   db.all(query, (err, rows) => {
     if (err) {
       res.status(500).json({ error: err.message });
@@ -26,10 +25,10 @@ app.get('/Generos', (req, res) => {
   });
 });
 
-app.get('/Genero/:id', (req, res) => {
-  const id = req.params.id
+app.get("/Genero/:id", (req, res) => {
+  const id = req.params.id;
   console.log(id);
-  const query = `SELECT * FROM genres WHERE GenreID = ${id}`; 
+  const query = `SELECT * FROM genres WHERE GenreID = ${id}`;
   db.all(query, (err, rows) => {
     if (err) {
       res.status(500).json({ error: err.message });
@@ -38,34 +37,61 @@ app.get('/Genero/:id', (req, res) => {
     }
   });
 });
-  
-app.get('/crear/:genre', (req, res) => {
-  const genre = req.params.genre;
-  console.log(genre);
-  const query = `INSERT INTO genres  (Name)
-   VALUES ('${genre}');`; 
+
+/**
+ * NEW GENER
+ */
+// app.get("/crear/:genre", (req, res) => {
+//   const genre = req.params.genre;
+//   console.log(genre);
+//   const query = `INSERT INTO genres  (Name)
+//    VALUES ('${genre}');`;
+//   db.all(query, (err) => {
+//     err
+//       ? res.status(500).json({ error: err.message })
+//       : res.redirect("http://localhost:3000/Generos");
+//   });
+// });
+
+app.post("/genero", async (req, res) => {
+  try {
+    const genre = req.body.genre;
+
+    const sql = `INSERT INTO genres  (Name) VALUES ('${genre}');`;
+
+    const result = await db.query(sql);
+
+    res.status(200).json({ message: "Genero creado" });
+  } catch (error) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/**
+ * END NEW GENER
+ */
+
+app.get("/deleteGenero/:id", (req, res) => {
+  const id = req.params.id;
+  const query = `DELETE FROM genres WHERE GenreId = ${id}`;
   db.all(query, (err) => {
-     (err)? res.status(500).json({ error: err.message }) : res.redirect('http://localhost:3000/Generos');  
+    err
+      ? res.status(500).json({ error: err.message })
+      : res.redirect("http://localhost:3000/Generos");
   });
 });
-app.get('/deleteGenero/:id',(req,res)=>
-{
-const id = req.params.id;
-const query = `DELETE FROM genres WHERE GenreId = ${id}`;
-db.all(query,(err)=>{
-  (err)? res.status(500).json({ error: err.message})  : res.redirect('http://localhost:3000/Generos'); 
-});
-});
-app.get('/actualizar',(req,res)=>
-{
+
+app.get("/actualizar", (req, res) => {
   //http://localhost:3000/actualizar?GenreId=30&name=Salsa
-const id = req.query.GenreId;
-const name = req.query.name
-console.log(id + ' ' + name);
-const query = `UPDATE genres set Name ='${name}' where GenreId = ${id}`;
-db.all(query,(err)=>{
-(err)? res.status(500).json({ error: err.message})  : res.redirect('http://localhost:3000/Generos'); 
-});
+  const id = req.query.GenreId;
+  const name = req.query.name;
+  console.log(id + " " + name);
+  const query = `UPDATE genres set Name ='${name}' where GenreId = ${id}`;
+  db.all(query, (err) => {
+    err
+      ? res.status(500).json({ error: err.message })
+      : res.redirect("http://localhost:3000/Generos");
+  });
 });
 
 /**
