@@ -3,12 +3,13 @@ const app = express();
 const port = 3000;
 const bodyParser = require("body-parser");
 const starwars = require("./sw");
-const sqlite3 = require("sqlite3").verbose();
+const sqlite3 = require("sqlite3");
 const db = new sqlite3.Database("./sqlite/chinook.db");
-
+// parse application/json
 app.use(bodyParser.json());
+// parse application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
 
-// Send welcome message
 app.get("/", (req, res) => {
   res.json({ saludo: "App Works" });
 });
@@ -55,15 +56,15 @@ app.get("/Genero/:id", (req, res) => {
 
 app.post("/genero", async (req, res) => {
   try {
+    console.log(req.body);
     const genre = req.body.genre;
-
     const sql = `INSERT INTO genres  (Name) VALUES ('${genre}');`;
+    await db.all(sql,(err)=>{
+        (err)?console.log(err):res.status(200).json({ message: "Genero creado" });
 
-    const result = await db.query(sql);
-
-    res.status(200).json({ message: "Genero creado" });
+    });
   } catch (error) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -81,13 +82,13 @@ app.get("/deleteGenero/:id", (req, res) => {
   });
 });
 
-app.get("/actualizar", (req, res) => {
+app.put("/actualizar", async(req, res) => {
   //http://localhost:3000/actualizar?GenreId=30&name=Salsa
-  const id = req.query.GenreId;
-  const name = req.query.name;
-  console.log(id + " " + name);
-  const query = `UPDATE genres set Name ='${name}' where GenreId = ${id}`;
-  db.all(query, (err) => {
+     const genre = req.body.genre;
+     const id = req.body.id;
+  console.log(id + " " + genre);
+  const query = `UPDATE genres set Name ='${genre}' where GenreId = ${id}`;
+   db.all(query, (err) => {
     err
       ? res.status(500).json({ error: err.message })
       : res.redirect("http://localhost:3000/Generos");
