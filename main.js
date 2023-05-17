@@ -6,6 +6,9 @@ const starwars = require("./sw");
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database("./sqlite/chinook.db");
 
+// TASK 1: Incorporar la libreria "swagger-ui-express"
+// TASK 2: Actualiza las rutas de "/generos" y permite los metodos GET, POST, PUT, DELETE
+
 app.use(bodyParser.json());
 
 // Send welcome message
