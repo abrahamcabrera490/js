@@ -5,7 +5,14 @@ const bodyParser = require("body-parser");
 const starwars = require("./sw");
 const sqlite3 = require("sqlite3");
 const db = new sqlite3.Database("./sqlite/chinook.db");
+<<<<<<< HEAD
 // parse application/json
+=======
+
+// TASK 1: Incorporar la libreria "swagger-ui-express"
+// TASK 2: Actualiza las rutas de "/generos" y permite los metodos GET, POST, PUT, DELETE
+
+>>>>>>> 55d02044393be18fb3e282d820df7ce67b789292
 app.use(bodyParser.json());
 // parse application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
